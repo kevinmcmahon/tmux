@@ -113,6 +113,7 @@ set_status_left() {
 }
 
 set_window_options() {
+  tmux set-window-option -g window-status-separator ""
   tmux set-window-option -g window-status-current-style "none"
   tmux set-window-option -g window-status-style "none"
   tmux set-window-option -g window-status-current-format "#[fg=${colors[active]},bg=${colors[background]}]${divider}#[fg=${colors[base]},bg=${colors[active]}] ${on_icon} #W #[fg=${colors[active]},bg=${colors[background]}]${sep_left}"
