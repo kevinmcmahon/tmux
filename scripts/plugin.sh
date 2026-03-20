@@ -103,16 +103,21 @@ fi
 
 set_status_bar() {
   tmux set-option -g status-style "bg=${colors[background]},fg=${colors[text]}"
+  tmux set-option -g status-justify left
+  tmux set-option -g status-left-length 40
+  tmux set-option -g status-right-length 120
 }
 
 set_status_left() {
-  tmux set-option -g status-left "#[bg=${colors[hostname]},fg=${colors[base]}]#{?client_prefix,#[bg=${colors[prefix]}],} ${left_icon} #H #[fg=${colors[hostname]},bg=${colors[background]}]#{?client_prefix,#[fg=${colors[prefix]}],}${sep_left} "
+  tmux set-option -g status-left "#[bg=${colors[hostname]},fg=${colors[base]}]#{?client_prefix,#[bg=${colors[prefix]}],} ${left_icon} #H #[fg=${colors[hostname]},bg=${colors[background]}]#{?client_prefix,#[fg=${colors[prefix]}],}${sep_left}"
 }
 
 set_window_options() {
-  tmux set-window-option -g window-status-current-format "#[fg=${colors[active]},bg=${colors[background]}]${divider}#[fg=${colors[base]},bg=${colors[active]}] ${on_icon}  #W #[fg=${colors[active]},bg=${colors[background]}]${sep_left}"
-  tmux set-window-option -g window-status-format "#[fg=${colors[inactive]},bg=${colors[background]}]${divider}#[fg=${colors[base]},bg=${colors[inactive]}] ${off_icon}  #W #[fg=${colors[inactive]},bg=${colors[background]}]${sep_left}"
-  tmux set-window-option -g window-status-activity-style "bold"
+  tmux set-window-option -g window-status-current-style "none"
+  tmux set-window-option -g window-status-style "none"
+  tmux set-window-option -g window-status-current-format "#[fg=${colors[active]},bg=${colors[background]}]${divider}#[fg=${colors[base]},bg=${colors[active]}] ${on_icon} #W #[fg=${colors[active]},bg=${colors[background]}]${sep_left}"
+  tmux set-window-option -g window-status-format "#[fg=${colors[inactive]},bg=${colors[background]}]${divider}#[fg=${colors[base]},bg=${colors[inactive]}] ${off_icon} #W #[fg=${colors[inactive]},bg=${colors[background]}]${sep_left}"
+  tmux set-window-option -g window-status-activity-style "none"
   tmux set-window-option -g window-status-bell-style "bold"
 }
 
@@ -125,7 +130,7 @@ generate_element() {
   case "$element" in
     "cwd")
       if [[ "$show_cwd" == "on" ]]; then
-        result="#[fg=${colors[cwd]},bg=${last_bg}]${sep_right}#[fg=${colors[base]},bg=${colors[cwd]}]  #(sh ${current_dir}/cwd.sh) "
+        result="#[fg=${colors[cwd]},bg=${last_bg}]${sep_right}#[fg=${colors[base]},bg=${colors[cwd]}]  #(bash ${current_dir}/cwd.sh) "
         echo "$result|${colors[cwd]}"
       else
         echo "|$last_bg"
@@ -133,7 +138,7 @@ generate_element() {
       ;;
     "sysinfo")
       if [[ "$show_sysinfo" == "on" ]]; then
-        result="#[fg=${colors[sysinfo]},bg=${last_bg}]${sep_right}#[fg=${colors[base]},bg=${colors[sysinfo]}] #(sh ${current_dir}/sysinfo.sh) "
+        result="#[fg=${colors[sysinfo]},bg=${last_bg}]${sep_right}#[fg=${colors[base]},bg=${colors[sysinfo]}] #(bash ${current_dir}/sysinfo.sh) "
         echo "$result|${colors[sysinfo]}"
       else
         echo "|$last_bg"
